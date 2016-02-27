@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Call Me Tutorial</title>
+
+	<link rel="stylesheet" 
+		href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" 
+		href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+	<link rel="stylesheet" href="css/intlTelInput.css">
+</head>
+<body>
+	<div class="container">
+		<h1>Call Me</h1>
+		<p>
+			This simple form converts your website's users into engaged customers by 
+			creating an easy way for your customers to contact your sales and 
+			support teams right on your website.
+		</p>
+		<p>Here's an example of how it's done!</p>
+
+		<div class="row">
+			<div class="col-md-12">
+				<form id="contactForm" role="form">
+					<div class="form-group">
+						<h3>Call Sales</h3>
+						<p class="help-block">
+							Are you interested in impressing your friends and 
+							confounding your enemies? Enter your phone number 
+							below, and our team will contact you right away.
+						</p>
+					</div>
+					<div class="form-group">
+						<input type="text" id="phoneNumber" class="form-control">
+					</div>
+					<button type="submit" class="btn btn-default">
+						Call Me
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="js/intlTelInput.min.js"></script>
+	<script type="text/javascript">
+		$(function() {		    
+		    $('#phoneNumber').intlTelInput({
+		    	preferredCountries: ["pl","us"],
+		        responsiveDropdown: true,
+		        autoFormat: true,
+		        utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/8.4.3/js/utils.js'
+		    });
+
+		    $('#contactForm').on('submit', function(e) {
+		    	e.preventDefault();
+	    		var isValid = $("#phoneNumber").intlTelInput("isValidNumber");
+	    		if(isValid){
+
+			        $.ajax({
+			            url: 'make_call.php',
+			            method: 'POST',
+			            dataType: 'json',
+			            data: {
+			                phoneNumber: $('#phoneNumber').val()
+			            }
+			        }).done(function(data) {
+			            alert(data.message);
+			        }).fail(function(error) {
+			            alert(JSON.stringify(error));
+			        });
+		    	}else{
+		    		alert("Phone number is incorrect")
+		    	}
+		    });
+		});
+	</script>
+</body>
+</html>
